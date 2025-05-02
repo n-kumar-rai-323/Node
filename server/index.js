@@ -13,7 +13,11 @@ mongoose
   .catch((e) => {
     console.log(`Database Error ${e}`);
   });
+const indeRoute = require("./routes/index");
+app.use(express.urlencoded({ extended: true }));
 
+app.use(express.json());
+app.use("/",indeRoute)
 app.listen(PORT, (req, res) => {
   console.log(`Application Running ${PORT}`);
 });
