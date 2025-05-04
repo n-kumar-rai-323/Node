@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const cors = require("cors")
 const PORT = Number(process.env.PORT) | 9200;
 
 mongoose
@@ -15,7 +16,7 @@ mongoose
   });
 const indeRoute = require("./routes/index");
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors())
 app.use(express.json());
 app.use("/",indeRoute)
 app.listen(PORT, (req, res) => {
