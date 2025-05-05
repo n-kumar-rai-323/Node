@@ -1,0 +1,39 @@
+.first {
+  height: 200px;
+  /* border-width: 5px;
+    border-color: red;
+    border-style: dashed; */
+  width: 300px;
+  border-radius: 10px 100px /120px;
+  background-color: gray;
+  padding-top: 20px;
+  padding-left: 30px;
+  margin-top: 40px;
+  margin-left: 50px;
+}
+
+.second {
+  height: 400px;
+  width: 600px;
+  border: 6px yellow dashed;
+  background-color: green;
+  padding: 50px;
+  margin-top: 90px;
+}
+
+.btn {
+  appearance: none;
+  background-color: #fafbfc;
+  border: 1px solid rgba(27,31,35, 0.15);
+  border-radius: 6px;
+  color: #24292e;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 16px;
+}
+
+.btn:hover{
+    background-color: darkgrey;
+    text-decoration: none;
+    transition-duration: 0.1s;
+}
