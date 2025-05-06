@@ -36,7 +36,7 @@ const LoginPage = () => {
       setLoading(false);
 
       toast.success("Login successful:", response.data);
-      router.push("/dashboard");
+      router.push("/home");
     } catch (error) {
       setLoading(false);
       toast.error("Login failed:", error);
