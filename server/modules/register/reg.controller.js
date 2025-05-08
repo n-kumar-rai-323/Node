@@ -1,5 +1,4 @@
 const Model = require("./reg.model");
-const bcrypt = require("bcrypt");
 const { genHash, compareHash } = require("../../utils/secure");
 const { genOTP } = require("../../utils/token");
 const mailerService = require("../../services/mailer"); // More semantic import name
