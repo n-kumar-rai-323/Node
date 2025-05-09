@@ -27,8 +27,7 @@ const customMarkerIcon = new Icon({
 const Map = (MapProps: MapProps) => {
   const { zoom = defaults.zoom, posix } = MapProps;
   const [isClient, setIsClient] = useState(false);
-  const mapRef = useRef<HTMLDivElement>(null);
-
+  
   useEffect(() => {
     setIsClient(true);
   }, []);
