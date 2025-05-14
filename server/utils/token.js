@@ -4,17 +4,28 @@ const JWT = require("jsonwebtoken")
 
 
 
-const genToken = (data) =>{
-    return JWT.sign(data, process.env.JWT_SECRET,{
-        expiresIn:process.env.JWT_DURATION,
-    });
+const genToken = (data, expiresIn = '1h') => { // Default expiration of 1 hour
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not defined");
+  }
+  return JWT.sign(data, process.env.JWT_SECRET, {
+    expiresIn: expiresIn,
+  });
+};
+
+const verifyToken = (token) => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not defined");
+  }
+  try {
+    return JWT.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    //  Handle different JWT errors (e.g., expired, invalid signature)
+    throw new Error("Invalid or expired token");
+  }
+};
+const genOTP = () => {
+  return crypto.randomInt(100000, 999999)
 }
 
-const verifyToken = (token)=>{
-    return JWT.verify(token, process.env.JWT_SECRET)
-}
-const genOTP = ()=>{
-    return crypto.randomInt(100000, 999999)
-}
-
-module.exports ={genOTP, genToken, verifyToken}
+module.exports = { genOTP, genToken, verifyToken }

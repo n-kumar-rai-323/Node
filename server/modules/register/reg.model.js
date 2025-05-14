@@ -6,7 +6,7 @@ const Register = new Schema({
   password: { type: String, required: true },
   isBlocked: { type: Boolean, required: true, default: false },
   isActive: { type: Boolean, required: true, default: false },
-  token: Number,
+  token: String,
   otpExpiresAt: Date, // New field for OTP expiration
 });
 

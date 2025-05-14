@@ -2,15 +2,17 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from 'next/link';
+import { useRouter } from 'next/navigation'; // Import useRouter for redirection
+import Link from 'next/link'; // Import Link for navigation
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "sonner";
 
 const ForgotPasswordPage = () => {
+  const router = useRouter(); // Initialize useRouter
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(""); // To display success or error messages
+  const [message, setMessage] = useState(""); // To display success or error messages after request
 
   const initialValues = {
     email: "",
@@ -28,23 +30,29 @@ const ForgotPasswordPage = () => {
     setMessage(""); // Clear previous messages
 
     try {
-      // Replace with your actual backend API endpoint for forgot password
+      // Your backend endpoint to request a password reset OTP
       const response = await axios.post(
-        `http://localhost:8900/log/forget-password`, // Example endpoint
+        `http://localhost:8900/log/forget-password`,
         values
       );
 
       setLoading(false);
-      setMessage("Password reset link sent to your email address.");
-      toast.success("Password reset email sent.");
-      resetForm(); // Clear the form on success
+      // Update message based on the typical flow (OTP sent)
+      setMessage(response.data.msg || "An OTP has been sent to your email address.");
+      toast.success(response.data.msg || "Password reset email sent.");
+      resetForm(); // Clear the form on successful request
+
+      // Redirect to the OTP verification page, passing the email
+      router.push(`/verify?email=${encodeURIComponent(values.email)}`);
+
 
     } catch (error) {
       setLoading(false);
+      // Extract user-friendly error message from backend response
       const errorMessage = (error.response && error.response.data && error.response.data.msg)
         ? error.response.data.msg
         : "Failed to send password reset email. Please try again.";
-      setMessage(errorMessage);
+      setMessage(errorMessage); // Display error message on the page
       toast.error("Failed to send reset email:", errorMessage);
     } finally {
       setSubmitting(false);
@@ -84,8 +92,9 @@ const ForgotPasswordPage = () => {
                 />
               </div>
 
+              {/* Display success or error message after requesting OTP */}
               {message && (
-                <div className={`px-4 py-2 rounded relative ${message.includes('sent') ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'}`}>
+                <div className={`px-4 py-2 rounded relative text-sm ${message.includes('OTP has been sent') || message.includes('sent successfully') ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'}`}>
                   {message}
                 </div>
               )}
@@ -95,15 +104,17 @@ const ForgotPasswordPage = () => {
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                 disabled={isSubmitting || loading}
               >
-                {loading ? "Sending..." : "Send Reset Link"}
+                {loading ? "Sending..." : "Send Reset OTP"}
               </button>
             </Form>
           )}
         </Formik>
 
+        {/* Link back to the Login page */}
         <p className="mt-4 text-center text-gray-600 text-sm">
           Remember your password?{" "}
-          <Link href="/login" className="text-blue-500 hover:underline">
+          {/* Corrected href to point to the login page */}
+          <Link href="/verify" className="text-blue-500 hover:underline">
             Log In
           </Link>
         </p>
