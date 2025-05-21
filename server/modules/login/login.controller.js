@@ -100,4 +100,34 @@ const changePassword = async ({ email, oldpassword, newPassword }) => {
   if (!updatedUser) throw new Error("Password Change failed");
   return { data: null, msg: "Password Changed Successfully" };
 };
-module.exports = { Login, genForgetPasswordToken, verifyForgetPasswordToken, changePassword };
+
+
+const resetPassword = async({email, newPassword})=>{
+  const user = await Model.findOne({email, isActive:true, isBlocked:false});
+  if(!user) throw new Error("User not found");
+  const password = genHash(newPassword);
+  const updatedUser = await Model.findOneAndUpdate(
+    {email},
+    {password},
+    {new:true}
+  )
+  if(!updatedUser) throw new Error("Password Reset failed");
+  return {data:null, msg:"Password Reset Successfully"};
+}
+
+const blockUser = async({email})=>{
+  const user = await Model.findOne({email, isActive:true});
+  if(!user) throw new Error("User not found")
+
+    const updatedUser = await Model.findOneAndUpdate(
+      {email},
+      {isBlocked: !user?.isBlocked},
+      {new:true}
+    );
+    if(!updatedUser) throw new Error("User Block failed");
+    return {
+      data: {isBlocked: updatedUser?.isBlocked},
+      msg:`User ${updatedUser?.isBlocked? "Blocked" : "unblock"} Successfully`,
+    };
+}
+module.exports = { Login, genForgetPasswordToken, verifyForgetPasswordToken, changePassword, resetPassword, blockUser};

@@ -38,6 +38,24 @@ router.put("/change-password", async (req, res, next) => {  // Added route for v
   }
 });
 
+// Admin controller 
+router.put("/reset-password", async (req, res, next) => {  // Added route for reset Password
+  try {
+    const result = await LoginController.resetPassword(req.body);
+    res.json(result);
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.patch("/block", async (req, res, next) => {  // Added route for reset Password
+  try {
+    const result = await LoginController.blockUser(req.body);
+    res.json(result);
+  } catch (e) {
+    next(e);
+  }
+});
 
 
 module.exports=router
